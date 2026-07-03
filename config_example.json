@@ -1,0 +1,9 @@
+{
+  "datasets": {
+    "CIC17": "data/CIC17",
+    "CIC18_Friday": "data/CIC18/Friday",
+    "CIC18_Thursday": "data/CIC18/Thursday"
+  },
+  "reference_dataset": "CIC17",
+  "target_column": "Label"
+}
