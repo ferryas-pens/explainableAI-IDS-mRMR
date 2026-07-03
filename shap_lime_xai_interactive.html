@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Cyber Security Research Group  · CSRG · Politeknik ELektronika Negeri Surabaya</title>
+<style>
+:root{
+  --bg:#050b14;--panel:#0b1b2e;--panel2:#10243a;--card:#0e2238;--text:#e8f2ff;
+  --muted:#9eb3ca;--line:#25425f;--cyan:#3dd5ff;--green:#76f7c8;--red:#ff6b6b;
+  --yellow:#ffd166;--purple:#c084fc;--orange:#fb923c;--blue:#60a5fa;--pink:#f472b6;
+  --shadow:0 18px 45px rgba(0,0,0,.36);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 10% 0%,rgba(61,213,255,.18),transparent 32%),
+    radial-gradient(circle at 92% 8%,rgba(118,247,200,.12),transparent 30%),
+    linear-gradient(135deg,#04070e 0%,#071426 58%,#081a2d 100%);
+  min-height:100vh;
+}
+header{
+  padding:28px 26px 18px;
+  border-bottom:1px solid rgba(158,179,202,.17);
+  background:rgba(5,11,20,.84);
+  backdrop-filter:blur(10px);
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+.header-inner{
+  max-width:1500px;
+  margin:0 auto;
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  align-items:flex-start;
+}
+h1{
+  margin:0 0 8px;
+  font-size:clamp(25px,3vw,42px);
+  letter-spacing:-.045em;
+  line-height:1.06;
+}
+.subtitle{
+  margin:0;
+  color:var(--muted);
+  max-width:1050px;
+  line-height:1.55;
+  font-size:15px;
+}
+.pill{
+  white-space:nowrap;
+  border:1px solid rgba(61,213,255,.38);
+  background:rgba(61,213,255,.08);
+  color:#baf2ff;
+  border-radius:999px;
+  padding:9px 13px;
+  font-size:12px;
+  font-weight:800;
+}
+main{max-width:1500px;margin:0 auto;padding:22px 24px 50px}
+.grid{display:grid;grid-template-columns:390px 1fr;gap:18px;align-items:start}
+@media(max-width:1120px){.grid{grid-template-columns:1fr}header{position:relative}}
+.panel{
+  background:rgba(11,27,46,.88);
+  border:1px solid rgba(158,179,202,.15);
+  border-radius:22px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+.panel h2{margin:0;padding:18px 18px 8px;font-size:18px;letter-spacing:-.02em}
+.panel-body{padding:14px 18px 18px}
+p{color:var(--muted);line-height:1.6}
+label{display:block;font-size:13px;color:#c8dbef;font-weight:750;margin-bottom:7px}
+select,input[type=range]{width:100%}
+select{
+  padding:11px 12px;
+  background:#061322;
+  color:var(--text);
+  border:1px solid var(--line);
+  border-radius:12px;
+  outline:none;
+}
+input[type=range]{accent-color:var(--cyan)}
+.control{margin-bottom:16px}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+button{
+  border:1px solid rgba(158,179,202,.2);
+  background:#071729;
+  color:#dcecff;
+  border-radius:999px;
+  padding:9px 12px;
+  font-size:12px;
+  font-weight:850;
+  cursor:pointer;
+  transition:.18s ease;
+}
+button:hover{transform:translateY(-1px);border-color:rgba(61,213,255,.6)}
+button.active{background:rgba(61,213,255,.18);border-color:rgba(61,213,255,.72);color:#baf2ff}
+.note{
+  font-size:12px;
+  line-height:1.55;
+  color:#d9ecff;
+  background:rgba(61,213,255,.06);
+  border-left:3px solid rgba(61,213,255,.55);
+  border-radius:10px;
+  padding:10px 12px;
+}
+.warn{
+  font-size:12px;
+  line-height:1.55;
+  color:#f8e2a5;
+  background:rgba(255,209,102,.08);
+  border:1px solid rgba(255,209,102,.25);
+  border-radius:14px;
+  padding:12px;
+}
+.cards{display:grid;grid-template-columns:repeat(4,minmax(170px,1fr));gap:14px;margin-bottom:18px}
+@media(max-width:920px){.cards{grid-template-columns:repeat(2,1fr)}}@media(max-width:620px){.cards{grid-template-columns:1fr}}
+.metric{
+  padding:16px;
+  border-radius:18px;
+  background:linear-gradient(180deg,rgba(16,36,58,.9),rgba(9,25,43,.9));
+  border:1px solid rgba(158,179,202,.14);
+  box-shadow:var(--shadow);
+}
+.metric .k{text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-size:12px;margin-bottom:8px}
+.metric .v{font-size:25px;font-weight:900;letter-spacing:-.04em}
+.metric .hint{font-size:12px;color:#b7cadf;margin-top:6px;line-height:1.42}
+.pipeline{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;padding:16px}
+@media(max-width:1120px){.pipeline{grid-template-columns:1fr 1fr}}@media(max-width:680px){.pipeline{grid-template-columns:1fr}}
+.stage{
+  position:relative;
+  min-height:138px;
+  border:1px solid rgba(158,179,202,.16);
+  background:rgba(7,23,41,.72);
+  border-radius:16px;
+  padding:13px;
+}
+.stage h3{margin:0 0 8px;font-size:14px;color:#e8f2ff}
+.stage p{margin:0;color:var(--muted);font-size:12px}
+.stage .num{
+  display:inline-grid;place-items:center;width:26px;height:26px;border-radius:999px;background:rgba(61,213,255,.15);
+  border:1px solid rgba(61,213,255,.4);color:#baf2ff;font-weight:900;font-size:12px;margin-bottom:7px
+}
+.badge{
+  display:inline-block;
+  margin-top:10px;
+  border:1px solid rgba(61,213,255,.25);
+  background:rgba(61,213,255,.07);
+  color:#baf2ff;
+  border-radius:9px;
+  padding:5px 7px;
+  font-size:12px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+.section-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:18px;margin-top:18px}
+@media(max-width:1120px){.section-grid{grid-template-columns:1fr}}
+table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  border-radius:16px;
+  border:1px solid rgba(158,179,202,.15);
+  overflow:hidden;
+  font-size:13px;
+}
+th,td{padding:9px 10px;border-bottom:1px solid rgba(158,179,202,.11);text-align:right;color:#dcecff;vertical-align:top}
+th:first-child,td:first-child{text-align:left}
+th{background:rgba(7,23,41,.88);color:#a9bed6}
+tbody tr{background:rgba(16,36,58,.48)}
+tbody tr:nth-child(even){background:rgba(7,23,41,.50)}
+tbody tr.active{background:linear-gradient(90deg,rgba(61,213,255,.22),rgba(118,247,200,.10));outline:1px solid rgba(61,213,255,.62);outline-offset:-1px}
+.tag{
+  display:inline-flex;
+  border-radius:999px;
+  padding:4px 8px;
+  font-size:12px;
+  font-weight:850;
+  border:1px solid rgba(158,179,202,.2);
+}
+.tag.good{background:rgba(118,247,200,.11);color:#c6ffe9;border-color:rgba(118,247,200,.33)}
+.tag.bad{background:rgba(255,107,107,.12);color:#ffc4c4;border-color:rgba(255,107,107,.34)}
+.tag.warn2{background:rgba(255,209,102,.12);color:#ffe6a7;border-color:rgba(255,209,102,.35)}
+.bar-row{display:grid;grid-template-columns:180px 1fr 75px;gap:10px;align-items:center;margin:9px 0}
+.bar-name{font-size:12px;color:#c9dced;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar-shell{height:13px;border:1px solid rgba(158,179,202,.14);background:#061322;border-radius:999px;overflow:hidden}
+.bar{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--cyan),var(--green));transition:width .22s ease}
+.bar.red{background:linear-gradient(90deg,var(--red),var(--yellow))}
+.bar.purple{background:linear-gradient(90deg,var(--purple),var(--cyan))}
+.bar.orange{background:linear-gradient(90deg,var(--orange),var(--yellow))}
+.bar.blue{background:linear-gradient(90deg,var(--blue),var(--cyan))}
+.bar.green{background:linear-gradient(90deg,var(--green),var(--cyan))}
+.bar.pink{background:linear-gradient(90deg,var(--pink),var(--purple))}
+.bar-value{text-align:right;font-size:12px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.formula{
+  white-space:pre-wrap;
+  overflow:auto;
+  background:#061322;
+  border:1px solid rgba(158,179,202,.15);
+  border-radius:16px;
+  padding:14px;
+  color:#d9ecff;
+  font-size:13px;
+  line-height:1.64;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  max-height:650px;
+}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;padding:0 18px 10px}
+.tab.active{background:rgba(61,213,255,.18);border-color:rgba(61,213,255,.60);color:#baf2ff}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:760px){.two-col{grid-template-columns:1fr}}
+.mini-card{
+  border:1px solid rgba(158,179,202,.15);
+  background:rgba(7,23,41,.63);
+  border-radius:18px;
+  padding:14px;
+}
+.mini-card h3{margin:0 0 10px;font-size:15px}
+.caption{font-size:12px;color:var(--muted);line-height:1.45;margin-top:9px}
+.svg-wrap{padding:10px 16px 16px}
+svg{width:100%;height:auto;display:block}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.footer-note{
+  margin-top:18px;
+  border:1px solid rgba(255,209,102,.24);
+  background:rgba(255,209,102,.07);
+  color:#f8e2a5;
+  border-radius:18px;
+  padding:16px 18px;
+  font-size:13px;
+  line-height:1.56;
+}
+.water-row{display:grid;grid-template-columns:170px 1fr 72px;gap:10px;align-items:center;margin:8px 0}
+.water-label{font-size:12px;color:#c8dced;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.axis{height:13px;background:#061322;border:1px solid rgba(158,179,202,.12);border-radius:999px;position:relative;overflow:hidden}
+.axis .zero{position:absolute;left:50%;top:0;bottom:0;width:2px;background:rgba(232,242,255,.45)}
+.axis .pos{position:absolute;left:50%;height:100%;background:linear-gradient(90deg,var(--red),var(--yellow));border-radius:999px}
+.axis .neg{position:absolute;right:50%;height:100%;background:linear-gradient(90deg,var(--green),var(--cyan));border-radius:999px}
+.coalition{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.coalition label{
+  margin:0;display:flex;align-items:center;gap:6px;background:#061322;border:1px solid rgba(158,179,202,.16);
+  border-radius:999px;padding:7px 9px;font-size:12px;color:#dcecff;cursor:pointer
+}
+.coalition input{width:auto}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <div>
+      <h1>Interaktif: Cara Kerja SHAP dan LIME untuk Explainable AI</h1>
+      <p class="subtitle">
+        Visualisasi ini memperlihatkan bagaimana SHAP dan LIME menjelaskan prediksi model IDS.
+        SHAP menghitung kontribusi fitur berbasis konsep Shapley value; LIME membuat model lokal sederhana di sekitar satu instance.
+      </p>
+    </div>
+    <div class="pill">Cyber Security Research Group  · CSRG · Politeknik ELektronika Negeri Surabaya</div>
+  </div>
+</header>
+
+<main>
+  <div class="grid">
+    <aside class="panel">
+      <h2>Kontrol Simulasi</h2>
+      <div class="panel-body">
+        <div class="control">
+          <label for="scenario">Instance IDS</label>
+          <select id="scenario">
+            <option value="normal">Normal Web Session</option>
+            <option value="scan">Port Scan</option>
+            <option value="dos">DoS / SYN Flood</option>
+            <option value="bruteforce">SSH Brute Force</option>
+            <option value="exfil">Data Exfiltration</option>
+          </select>
+        </div>
+
+        <div class="control">
+          <label for="targetFeature">Fitur target untuk coalition SHAP</label>
+          <select id="targetFeature"></select>
+        </div>
+
+        <div class="control">
+          <label for="kernelWidth">Kernel width LIME: <span id="kernelLabel">0.75</span></label>
+          <input id="kernelWidth" type="range" min="0.20" max="1.50" step="0.05" value="0.75"/>
+        </div>
+
+        <div class="control">
+          <label for="perturbN">Jumlah perturbasi LIME: <span id="perturbLabel">500</span></label>
+          <input id="perturbN" type="range" min="100" max="2000" step="100" value="500"/>
+        </div>
+
+        <div class="control">
+          <label for="threshold">Threshold attack: <span id="thresholdLabel">0.55</span></label>
+          <input id="threshold" type="range" min="0.30" max="0.90" step="0.01" value="0.55"/>
+        </div>
+
+        <div class="btns">
+          <button class="active" id="btnShap">SHAP</button>
+          <button id="btnLime">LIME</button>
+          <button id="btnCompare">Compare</button>
+        </div>
+
+        <br/>
+        <div class="note">
+          Gunakan kontrol untuk melihat bahwa SHAP menilai kontribusi fitur dengan membandingkan banyak subset fitur, sedangkan LIME membuat sampel perturbasi lokal lalu melatih model surrogate sederhana.
+        </div>
+      </div>
+    </aside>
+
+    <section>
+      <div class="cards">
+        <div class="metric">
+          <div class="k">Prediksi model</div>
+          <div class="v" id="predMetric">Normal</div>
+          <div class="hint" id="predHint">Output model asli f(x).</div>
+        </div>
+        <div class="metric">
+          <div class="k">Prob. attack</div>
+          <div class="v" id="probMetric">0.00</div>
+          <div class="hint">Sigmoid dari skor model.</div>
+        </div>
+        <div class="metric">
+          <div class="k">Mode xAI</div>
+          <div class="v" id="modeMetric">SHAP</div>
+          <div class="hint" id="modeHint">Kontribusi fitur berbasis subset.</div>
+        </div>
+        <div class="metric">
+          <div class="k">Keputusan IDS</div>
+          <div class="v" id="decisionMetric">ALLOW</div>
+          <div class="hint" id="decisionHint">Di bawah threshold.</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Alur Konseptual SHAP dan LIME</h2>
+        <div class="pipeline" id="conceptPipeline"></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="section-grid">
+    <section class="panel">
+      <h2>Instance IDS yang Dijelaskan</h2>
+      <div class="panel-body">
+        <table id="featureTable">
+          <thead><tr><th>Fitur</th><th>Nilai</th><th>Kontribusi model</th><th>Makna keamanan</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Model Asli f(x)</h2>
+      <div class="panel-body">
+        <div id="modelBars"></div>
+        <div class="formula" id="modelFormula"></div>
+      </div>
+    </section>
+  </div>
+
+  <section class="panel" style="margin-top:18px">
+    <h2>Visual Interaktif SHAP dan LIME</h2>
+    <div class="tabs">
+      <button class="tab active" data-tab="shap">SHAP</button>
+      <button class="tab" data-tab="lime">LIME</button>
+      <button class="tab" data-tab="compare">Perbandingan</button>
+      <button class="tab" data-tab="math">Rumus</button>
+      <button class="tab" data-tab="script">Pseudo-code</button>
+    </div>
+
+    <div class="panel-body" id="tabShap">
+      <div class="two-col">
+        <div class="mini-card">
+          <h3>SHAP waterfall lokal</h3>
+          <div id="shapWaterfall"></div>
+          <div class="caption">Merah menaikkan skor attack; hijau/biru menurunkan skor attack.</div>
+        </div>
+        <div class="mini-card">
+          <h3>Coalition simulator</h3>
+          <div id="coalitionBox" class="coalition"></div>
+          <div class="formula" id="coalitionFormula"></div>
+        </div>
+      </div>
+      <div class="two-col" style="margin-top:14px">
+        <div class="mini-card">
+          <h3>Subset marginal contribution</h3>
+          <svg id="shapSubsetSvg" viewBox="0 0 720 310"></svg>
+        </div>
+        <div class="mini-card">
+          <h3>Global mean |SHAP|</h3>
+          <div id="globalShapBars"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-body" id="tabLime" style="display:none">
+      <div class="two-col">
+        <div class="mini-card">
+          <h3>Perturbation cloud lokal</h3>
+          <svg id="limeSvg" viewBox="0 0 720 430"></svg>
+          <div class="caption">Titik dekat instance target diberi bobot lebih besar oleh kernel LIME.</div>
+        </div>
+        <div class="mini-card">
+          <h3>LIME local coefficients</h3>
+          <div id="limeBars"></div>
+          <div class="formula" id="limeFormula"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-body" id="tabCompare" style="display:none">
+      <div class="two-col">
+        <div class="mini-card">
+          <h3>SHAP vs LIME normalized importance</h3>
+          <div id="compareBars"></div>
+        </div>
+        <div class="mini-card">
+          <h3>Kapan menggunakan SHAP atau LIME ?</h3>
+          <div id="compareText"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-body" id="tabMath" style="display:none">
+      <div class="two-col">
+        <div class="mini-card">
+          <h3>Rumus SHAP</h3>
+          <div class="formula" id="shapMath"></div>
+        </div>
+        <div class="mini-card">
+          <h3>Rumus LIME</h3>
+          <div class="formula" id="limeMath"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-body" id="tabScript" style="display:none">
+      <div class="formula" id="scriptBox"></div>
+    </div>
+  </section>
+
+  <section class="panel" style="margin-top:18px">
+    <h2>Ringkasan Interpretasi</h2>
+    <div class="panel-body">
+      <div id="summaryText"></div>
+      <div class="footer-note">
+        [High confidence] Visualisasi ini tepat untuk menjelaskan perbedaan cara kerja SHAP dan LIME secara konseptual.
+        [Medium confidence] Angka dalam panel adalah toy model edukatif; pada penelitian nyata nilai SHAP/LIME harus dihitung dari model dan dataset yang benar-benar dilatih.
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+const features = [
+  ["pkt_rate","Jumlah paket per detik"],
+  ["byte_rate","Byte per detik"],
+  ["conn_rate","Koneksi baru per interval"],
+  ["syn_ratio","Proporsi SYN TCP"],
+  ["failed_login","Rasio login gagal"],
+  ["port_entropy","Keragaman port tujuan"]
+];
+
+const baseline = [0.22,0.24,0.18,0.06,0.02,0.12];
+
+const scenarios = {
+  normal:{label:"Normal",x:[.18,.24,.14,.04,.00,.10]},
+  scan:{label:"Attack",x:[.42,.12,.78,.72,.00,.86]},
+  dos:{label:"Attack",x:[.93,.82,.76,.88,.00,.18]},
+  bruteforce:{label:"Attack",x:[.28,.18,.46,.18,.94,.12]},
+  exfil:{label:"Attack",x:[.24,.92,.20,.05,.02,.14]}
+};
+
+const weights = {
+  linear:[0.95,1.15,1.05,1.35,1.70,1.25],
+  interactions:[
+    [0,0.12,0.18,0.35,0.02,0.28],
+    [0.12,0,0.10,0.20,0.05,0.22],
+    [0.18,0.10,0,0.32,0.22,0.42],
+    [0.35,0.20,0.32,0,0.05,0.30],
+    [0.02,0.05,0.22,0.05,0,0.08],
+    [0.28,0.22,0.42,0.30,0.08,0]
+  ],
+  bias:-1.55
+};
+
+let mode="shap";
+let activeTab="shap";
+let coalitionMask=[false,false,false,false,false,false];
+
+function sigmoid(z){return 1/(1+Math.exp(-z))}
+function logit(p){return Math.log(p/(1-p))}
+function fmt(v,n=3){return Number(v).toFixed(n)}
+function getState(){
+  return {
+    scenario:document.getElementById("scenario").value,
+    targetFeature:parseInt(document.getElementById("targetFeature").value || "0",10),
+    kernel:parseFloat(document.getElementById("kernelWidth").value),
+    perturb:parseInt(document.getElementById("perturbN").value,10),
+    threshold:parseFloat(document.getElementById("threshold").value)
+  };
+}
+function modelScoreWithMask(x, mask){
+  let z=weights.bias;
+  for(let i=0;i<features.length;i++){
+    const xi=mask[i]?x[i]:baseline[i];
+    z += weights.linear[i]*(xi-baseline[i]);
+  }
+  for(let i=0;i<features.length;i++){
+    for(let j=i+1;j<features.length;j++){
+      const xi=mask[i]?x[i]:baseline[i];
+      const xj=mask[j]?x[j]:baseline[j];
+      z += weights.interactions[i][j]*(xi-baseline[i])*(xj-baseline[j]);
+    }
+  }
+  return z;
+}
+function modelScore(x){
+  return modelScoreWithMask(x,[true,true,true,true,true,true]);
+}
+function featureContributionApprox(x){
+  const full = modelScore(x);
+  const base = modelScoreWithMask(x,[false,false,false,false,false,false]);
+  const vals=[];
+  for(let i=0;i<features.length;i++){
+    const maskOff=[true,true,true,true,true,true];
+    maskOff[i]=false;
+    const without=modelScoreWithMask(x,maskOff);
+    const leaveOne=full-without;
+    const singleMask=[false,false,false,false,false,false];
+    singleMask[i]=true;
+    const single=modelScoreWithMask(x,singleMask)-base;
+    vals.push(0.55*leaveOne+0.45*single);
+  }
+  const sum=vals.reduce((a,b)=>a+b,0);
+  const target=full-base;
+  const correction=(target-sum)/vals.length;
+  return vals.map(v=>v+correction);
+}
+function exactShapForFeature(x, featureIdx){
+  const n=features.length;
+  let phi=0;
+  const rows=[];
+  for(let maskInt=0;maskInt<(1<<n);maskInt++){
+    if(maskInt & (1<<featureIdx)) continue;
+    const S=[];
+    const maskWithout=[];
+    const maskWith=[];
+    for(let i=0;i<n;i++){
+      const inS=Boolean(maskInt&(1<<i));
+      maskWithout[i]=inS;
+      maskWith[i]=inS || i===featureIdx;
+      if(inS) S.push(i);
+    }
+    const s=S.length;
+    const weight=factorial(s)*factorial(n-s-1)/factorial(n);
+    const delta=modelScoreWithMask(x,maskWith)-modelScoreWithMask(x,maskWithout);
+    const term=weight*delta;
+    phi += term;
+    rows.push({subset:S,weight,delta,term});
+  }
+  return {phi,rows};
+}
+function factorial(n){
+  let r=1; for(let i=2;i<=n;i++) r*=i; return r;
+}
+function limeCoefficients(x,kernel,perturbN){
+  // Deterministic local coefficient toy: model sensitivity near x scaled by locality stability.
+  const baseCoef=[];
+  for(let i=0;i<features.length;i++){
+    let local=weights.linear[i];
+    for(let j=0;j<features.length;j++){
+      if(i!==j){
+        local += weights.interactions[Math.min(i,j)][Math.max(i,j)]*(x[j]-baseline[j]);
+      }
+    }
+    const featureScale=0.65+0.7*Math.abs(x[i]-0.5);
+    const stability=Math.min(1, Math.log10(perturbN)/3.25);
+    const kernelEffect=0.75+0.25*Math.min(1,kernel);
+    baseCoef.push(local*featureScale*stability*kernelEffect*0.32);
+  }
+  return baseCoef;
+}
+function barHTML(name,value,max=1,cls=""){
+  const pct=Math.max(0,Math.min(100,Math.abs(value)/max*100));
+  return `<div class="bar-row">
+    <div class="bar-name" title="${name}">${name}</div>
+    <div class="bar-shell"><div class="bar ${cls}" style="width:${pct}%"></div></div>
+    <div class="bar-value">${value>=0?"+":""}${fmt(value)}</div>
+  </div>`;
+}
+function waterRow(name,val,max){
+  const pct=Math.min(50,Math.abs(val)/max*50);
+  return `<div class="water-row">
+    <div class="water-label" title="${name}">${name}</div>
+    <div class="axis"><div class="zero"></div><div class="${val>=0?'pos':'neg'}" style="width:${pct}%"></div></div>
+    <div class="bar-value">${val>=0?"+":""}${fmt(val)}</div>
+  </div>`;
+}
+function updateTargetOptions(){
+  const sel=document.getElementById("targetFeature");
+  const current=sel.value;
+  sel.innerHTML=features.map((f,i)=>`<option value="${i}">${f[0]}</option>`).join("");
+  if(current) sel.value=current;
+}
+function renderConceptPipeline(){
+  const shap=[
+    ["Input fitur","Model menerima instance x yang ingin dijelaskan.","x"],
+    ["Prediksi model","Model asli f menghasilkan skor/kelas.","f(x)"],
+    ["Subset fitur","SHAP membandingkan banyak coalition fitur.","S⊆F"],
+    ["Marginal effect","Hitung perubahan prediksi saat fitur i ditambahkan.","Δᵢ"],
+    ["Shapley value","Rata-rata tertimbang kontribusi marginal.","φᵢ"],
+    ["Explanation","Waterfall lokal dan mean |SHAP| global.","local/global"]
+  ];
+  const lime=[
+    ["Target instance","Pilih satu instance x yang ingin dijelaskan.","x"],
+    ["Perturbasi","Buat sampel x′ di sekitar x.","x′"],
+    ["Prediksi f","Minta model asli memprediksi x′.","f(x′)"],
+    ["Kernel weight","Sampel dekat diberi bobot lebih besar.","πₓ"],
+    ["Surrogate","Latih model lokal sederhana g.","g(x)"],
+    ["Importance","Koefisien g menjadi penjelasan lokal.","βᵢ"]
+  ];
+  const arr=mode==="lime"?lime:shap;
+  document.getElementById("conceptPipeline").innerHTML=arr.map((s,i)=>`
+    <div class="stage">
+      <div class="num">${i+1}</div>
+      <h3>${s[0]}</h3>
+      <p>${s[1]}</p>
+      <span class="badge">${s[2]}</span>
+    </div>`).join("");
+}
+function renderMetrics(st,x,z,prob){
+  const pred=prob>=st.threshold?"Attack":"Normal";
+  document.getElementById("predMetric").textContent=pred;
+  document.getElementById("probMetric").textContent=fmt(prob,2);
+  document.getElementById("modeMetric").textContent=mode.toUpperCase();
+  document.getElementById("modeHint").textContent=mode==="shap"?"Kontribusi berbasis subset fitur.":mode==="lime"?"Surrogate lokal di sekitar instance.":"Bandingkan stabilitas dan cakupan.";
+  document.getElementById("decisionMetric").textContent=pred==="Attack"?"ALERT":"ALLOW";
+  document.getElementById("decisionMetric").style.color=pred==="Attack"?"#ffc4c4":"#c6ffe9";
+  document.getElementById("decisionHint").textContent=pred==="Attack"?"Probabilitas melewati threshold.":"Probabilitas di bawah threshold.";
+  document.getElementById("predHint").textContent=`Label simulasi: ${scenarios[st.scenario].label}`;
+  document.getElementById("kernelLabel").textContent=fmt(st.kernel,2);
+  document.getElementById("perturbLabel").textContent=st.perturb;
+  document.getElementById("thresholdLabel").textContent=fmt(st.threshold,2);
+  document.getElementById("btnShap").classList.toggle("active",mode==="shap");
+  document.getElementById("btnLime").classList.toggle("active",mode==="lime");
+  document.getElementById("btnCompare").classList.toggle("active",mode==="compare");
+}
+function renderFeatureTable(st,x,contrib){
+  const tbody=document.querySelector("#featureTable tbody");
+  tbody.innerHTML=features.map((f,i)=>{
+    const hi=x[i]>.65;
+    return `<tr class="${hi?'active':''}">
+      <td><strong class="mono">${f[0]}</strong></td>
+      <td>${fmt(x[i],2)}</td>
+      <td>${contrib[i]>=0?"+":""}${fmt(contrib[i])}</td>
+      <td style="text-align:left">${f[1]} ${hi?'<span class="tag bad">tinggi</span>':'<span class="tag good">normal/rendah</span>'}</td>
+    </tr>`;
+  }).join("");
+}
+function renderModelBox(x,z,prob,contrib,st){
+  const max=Math.max(.01,...contrib.map(Math.abs));
+  document.getElementById("modelBars").innerHTML=features.map((f,i)=>barHTML(f[0],contrib[i],max,contrib[i]>=0?"red":"green")).join("");
+  document.getElementById("modelFormula").textContent=
+`Toy model IDS:
+z = bias + Σ wᵢ(xᵢ - baselineᵢ) + Σ wᵢⱼ(xᵢ-baselineᵢ)(xⱼ-baselineⱼ)
+p_attack = sigmoid(z)
+
+bias = ${fmt(weights.bias)}
+z = ${fmt(z)}
+p_attack = ${fmt(prob)}
+threshold = ${fmt(st.threshold)}
+
+Catatan:
+Model ini sengaja dibuat transparan agar mekanisme SHAP dan LIME dapat divisualisasikan tanpa library eksternal.`;
+}
+function renderShap(st,x,shapVals){
+  const base=modelScoreWithMask(x,[false,false,false,false,false,false]);
+  const full=modelScore(x);
+  const max=Math.max(.01,...shapVals.map(Math.abs));
+  const sorted=features.map((f,i)=>[f[0],shapVals[i]]).sort((a,b)=>Math.abs(b[1])-Math.abs(a[1]));
+  document.getElementById("shapWaterfall").innerHTML=
+    `<div class="caption">Baseline logit E[f(X)] ≈ ${fmt(base)} · Final logit f(x) = ${fmt(full)}</div>`+
+    sorted.map(x=>waterRow(x[0],x[1],max)).join("");
+
+  const global=features.map((f,i)=>[f[0],Math.abs(shapVals[i])*(0.65+0.09*i)]).sort((a,b)=>b[1]-a[1]);
+  const maxG=Math.max(.01,...global.map(x=>x[1]));
+  document.getElementById("globalShapBars").innerHTML=global.map(x=>barHTML(x[0],x[1],maxG,"purple")).join("");
+
+  renderCoalition(st,x);
+  renderSubsetSvg(st,x);
+}
+function renderCoalition(st,x){
+  const target=st.targetFeature;
+  document.getElementById("coalitionBox").innerHTML=features.map((f,i)=>{
+    if(i===target){
+      return `<label style="opacity:.55"><input type="checkbox" disabled/> ${f[0]} target</label>`;
+    }
+    return `<label><input type="checkbox" data-i="${i}" ${coalitionMask[i]?'checked':''}/> ${f[0]}</label>`;
+  }).join("");
+  document.querySelectorAll("#coalitionBox input[type=checkbox]").forEach(ch=>{
+    ch.onchange=()=>{
+      coalitionMask[parseInt(ch.dataset.i,10)] = ch.checked;
+      update();
+    };
+  });
+  const maskWithout=coalitionMask.map(Boolean);
+  maskWithout[target]=false;
+  const maskWith=maskWithout.slice();
+  maskWith[target]=true;
+  const fWithout=modelScoreWithMask(x,maskWithout);
+  const fWith=modelScoreWithMask(x,maskWith);
+  const delta=fWith-fWithout;
+  const exact=exactShapForFeature(x,target);
+  const subsetNames=features.map((f,i)=>maskWithout[i]?f[0]:null).filter(Boolean).join(", ") || "∅";
+  document.getElementById("coalitionFormula").textContent=
+`Fitur target: ${features[target][0]}
+Subset S: {${subsetNames}}
+
+f(S)        = ${fmt(fWithout)}
+f(S ∪ {i})  = ${fmt(fWith)}
+Δᵢ(S)       = f(S ∪ {i}) - f(S) = ${fmt(delta)}
+
+Nilai SHAP eksak untuk fitur ini:
+φ_${features[target][0]} = rata-rata tertimbang semua Δᵢ(S)
+φᵢ = ${fmt(exact.phi)}`;
+}
+function renderSubsetSvg(st,x){
+  const target=st.targetFeature;
+  const exact=exactShapForFeature(x,target);
+  const rows=exact.rows.slice(0,18);
+  const max=Math.max(.01,...rows.map(r=>Math.abs(r.term)));
+  const W=720,H=310,pad=45;
+  const barH=10, gap=5;
+  let svg=`<rect x="0" y="0" width="${W}" height="${H}" rx="16" fill="#061322" stroke="rgba(158,179,202,.15)"/>
+    <text x="45" y="28" fill="#e8f2ff" font-size="13" font-weight="900">Kontribusi marginal subset untuk ${features[target][0]}</text>
+    <line x1="${W/2}" y1="45" x2="${W/2}" y2="${H-25}" stroke="rgba(232,242,255,.35)"/>`;
+  rows.forEach((r,idx)=>{
+    const y=52+idx*(barH+gap);
+    const len=Math.min(250,Math.abs(r.term)/max*250);
+    const pos=r.term>=0;
+    const x0=pos?W/2:W/2-len;
+    const color=pos?"#ff6b6b":"#76f7c8";
+    const label=r.subset.map(i=>features[i][0].slice(0,4)).join(",") || "∅";
+    svg += `<rect x="${x0}" y="${y}" width="${len}" height="${barH}" rx="5" fill="${color}" opacity=".85"/>
+      <text x="20" y="${y+9}" fill="#9eb3ca" font-size="10">S=${label}</text>
+      <text x="${pos?W/2+len+8:W/2-len-70}" y="${y+9}" fill="#dcecff" font-size="10">${r.term>=0?"+":""}${fmt(r.term,3)}</text>`;
+  });
+  svg += `<text x="${W/2+8}" y="${H-8}" fill="#9eb3ca" font-size="11">positif → menaikkan skor attack</text>`;
+  document.getElementById("shapSubsetSvg").innerHTML=svg;
+}
+function renderLime(st,x,coefs){
+  const max=Math.max(.01,...coefs.map(Math.abs));
+  const items=features.map((f,i)=>[f[0],coefs[i]]).sort((a,b)=>Math.abs(b[1])-Math.abs(a[1]));
+  document.getElementById("limeBars").innerHTML=items.map(x=>waterRow(x[0],x[1],max)).join("");
+  document.getElementById("limeFormula").textContent=
+`LIME local surrogate:
+g(x') = β₀ + Σ βᵢx'ᵢ
+
+Langkah:
+1. Buat ${st.perturb} sampel perturbasi x′ di sekitar instance x.
+2. Prediksi setiap x′ dengan model asli f.
+3. Hitung bobot kedekatan:
+   πₓ(x′) = exp(-D(x,x′)² / kernel_width²)
+4. Fit model linear lokal g.
+5. Koefisien βᵢ menjadi feature importance lokal.
+
+kernel_width = ${fmt(st.kernel,2)}
+
+Interpretasi:
+Koefisien positif menaikkan skor attack di sekitar instance ini.
+Koefisien negatif menurunkan skor attack di sekitar instance ini.`;
+  renderLimeSvg(st,x);
+}
+function renderLimeSvg(st,x){
+  const svg=document.getElementById("limeSvg");
+  const W=720,H=430,pad=55;
+  const fx=2; // conn_rate
+  const fy=3; // syn_ratio
+  const sx=v=>pad+v*(W-2*pad);
+  const sy=v=>H-pad-v*(H-2*pad);
+  let pts="";
+  for(let i=0;i<90;i++){
+    const a=(i*37%100)/100;
+    const b=(i*53%100)/100;
+    const px=Math.max(0,Math.min(1,x[fx]+(a-.5)*0.9));
+    const py=Math.max(0,Math.min(1,x[fy]+(b-.5)*0.9));
+    const dist=Math.sqrt((px-x[fx])**2+(py-x[fy])**2);
+    const w=Math.exp(-(dist*dist)/(st.kernel*st.kernel));
+    const z=modelScore([x[0],x[1],px,py,x[4],x[5]]);
+    const p=sigmoid(z);
+    const color=p>.55?"rgba(255,107,107,":"rgba(118,247,200,";
+    pts += `<circle cx="${sx(px)}" cy="${sy(py)}" r="${3+8*w}" fill="${color}${0.25+0.55*w})" stroke="rgba(232,242,255,.18)"/>`;
+  }
+  svg.innerHTML=`<rect x="0" y="0" width="${W}" height="${H}" rx="16" fill="#061322" stroke="rgba(158,179,202,.15)"/>
+    <text x="55" y="32" fill="#e8f2ff" font-size="13" font-weight="900">Perturbasi LIME pada bidang conn_rate vs syn_ratio</text>
+    <line x1="${pad}" y1="${H-pad}" x2="${W-pad}" y2="${H-pad}" stroke="rgba(232,242,255,.28)"/>
+    <line x1="${pad}" y1="${pad}" x2="${pad}" y2="${H-pad}" stroke="rgba(232,242,255,.28)"/>
+    ${pts}
+    <circle cx="${sx(x[fx])}" cy="${sy(x[fy])}" r="13" fill="#ffd166" stroke="#fff1bd" stroke-width="3"/>
+    <text x="${sx(x[fx])+16}" y="${sy(x[fy])-14}" fill="#ffd166" font-size="12">target x</text>
+    <text x="${W-pad-70}" y="${H-18}" fill="#9eb3ca" font-size="12">conn_rate</text>
+    <text x="12" y="${pad}" fill="#9eb3ca" font-size="12">syn_ratio</text>
+    <text x="${pad}" y="${H-18}" fill="#76f7c8" font-size="11">green ≈ Normal</text>
+    <text x="${pad+120}" y="${H-18}" fill="#ffb4b4" font-size="11">red ≈ Attack</text>`;
+}
+function renderCompare(shapVals,coefs){
+  const shapAbs=shapVals.map(Math.abs);
+  const limeAbs=coefs.map(Math.abs);
+  const maxS=Math.max(.01,...shapAbs);
+  const maxL=Math.max(.01,...limeAbs);
+  let html="";
+  features.forEach((f,i)=>{
+    html += barHTML("SHAP "+f[0],shapAbs[i]/maxS,1,"purple");
+    html += barHTML("LIME "+f[0],limeAbs[i]/maxL,1,"blue");
+  });
+  document.getElementById("compareBars").innerHTML=html;
+  document.getElementById("compareText").innerHTML=
+`<p><strong>SHAP</strong> cocok ketika Anda ingin kontribusi fitur yang lebih konsisten secara teori, dapat dipakai untuk penjelasan lokal maupun global, tetapi komputasinya bisa lebih mahal karena mempertimbangkan banyak subset fitur.</p>
+<p><strong>LIME</strong> cocok ketika Anda ingin penjelasan cepat untuk satu prediksi tertentu. LIME fleksibel dan model-agnostic, tetapi hasilnya dapat berubah karena perturbasi, kernel width, dan sampling lokal.</p>
+<p>Untuk IDS: gunakan SHAP untuk audit global fitur seperti <span class="mono">syn_ratio</span> atau <span class="mono">failed_login</span>, lalu gunakan LIME untuk menjelaskan alert spesifik pada satu flow/log tertentu.</p>`;
+}
+function renderMath(){
+  document.getElementById("shapMath").textContent=
+`SHAP:
+φᵢ = Σ_{S⊆F\\{i}} [ |S|!(M-|S|-1)! / M! ] · [ f(S∪{i}) - f(S) ]
+
+Keterangan:
+F  = semua fitur
+M  = jumlah fitur
+S  = subset fitur tanpa fitur i
+f(S) = prediksi model saat hanya fitur S yang diketahui
+φᵢ = kontribusi fitur i terhadap prediksi
+
+Intuisi:
+SHAP menanyakan:
+"Jika fitur i ditambahkan ke berbagai subset fitur, rata-rata perubahan prediksinya berapa?"`;
+  document.getElementById("limeMath").textContent=
+`LIME:
+g = argmin_g  L(f, g, πₓ) + Ω(g)
+
+Keterangan:
+f   = model asli yang kompleks
+g   = model surrogate lokal yang sederhana
+πₓ  = bobot kedekatan terhadap instance x
+L   = loss antara prediksi f dan prediksi g di sekitar x
+Ω(g)= penalti kompleksitas agar g mudah dipahami
+
+Intuisi:
+LIME menanyakan:
+"Di sekitar instance ini saja, model kompleks f bisa didekati oleh model sederhana apa?"`;
+}
+function renderScript(){
+  document.getElementById("scriptBox").textContent=
+`# Pseudo-code SHAP dan LIME untuk IDS
+
+# =========================
+# SHAP
+# =========================
+import shap
+
+model = trained_random_forest_or_xgboost
+X_explain = X_test[selected_features]
+
+explainer = shap.TreeExplainer(model)
+shap_values = explainer.shap_values(X_explain)
+
+# Global explanation
+mean_abs_shap = abs(shap_values).mean(axis=0)
+
+# Local explanation
+instance_id = 0
+local_contrib = shap_values[instance_id]
+
+
+# =========================
+# LIME
+# =========================
+from lime.lime_tabular import LimeTabularExplainer
+
+lime_explainer = LimeTabularExplainer(
+    training_data=X_train[selected_features].values,
+    feature_names=selected_features,
+    class_names=["Normal", "Attack"],
+    mode="classification",
+    discretize_continuous=True
+)
+
+exp = lime_explainer.explain_instance(
+    X_test[selected_features].iloc[instance_id].values,
+    model.predict_proba,
+    num_features=10
+)
+
+lime_weights = exp.as_list()
+
+
+# =========================
+# Interpretasi IDS
+# =========================
+# SHAP:
+#   fitur dengan φ positif menaikkan skor Attack.
+#   fitur dengan φ negatif menurunkan skor Attack.
+#
+# LIME:
+#   rule/interval fitur dengan weight positif mendukung prediksi lokal.
+#   rule/interval fitur dengan weight negatif menahan prediksi lokal.`;
+}
+function renderSummary(st,x,prob,shapVals,coefs){
+  const shapTop=features.map((f,i)=>[f[0],shapVals[i]]).sort((a,b)=>Math.abs(b[1])-Math.abs(a[1])).slice(0,3);
+  const limeTop=features.map((f,i)=>[f[0],coefs[i]]).sort((a,b)=>Math.abs(b[1])-Math.abs(a[1])).slice(0,3);
+  document.getElementById("summaryText").innerHTML=
+`<p><strong>Prediksi model:</strong> probabilitas attack = <strong>${fmt(prob,3)}</strong>. Dengan threshold ${fmt(st.threshold,2)}, keputusan IDS adalah <strong>${prob>=st.threshold?"ALERT":"ALLOW"}</strong>.</p>
+<p><strong>Menurut SHAP:</strong> fitur paling berpengaruh adalah ${shapTop.map(x=>`<span class="mono">${x[0]} (${x[1]>=0?"+":""}${fmt(x[1])})</span>`).join(", ")}. Ini berarti fitur tersebut paling banyak mengubah skor model dibanding baseline.</p>
+<p><strong>Menurut LIME:</strong> di sekitar instance ini, model lokal paling dipengaruhi oleh ${limeTop.map(x=>`<span class="mono">${x[0]} (${x[1]>=0?"+":""}${fmt(x[1])})</span>`).join(", ")}.</p>
+<p><strong>Pesan utama:</strong> SHAP lebih kuat untuk konsistensi global-lokal; LIME lebih praktis untuk menjelaskan satu alert secara cepat. Untuk IDS, keduanya saling melengkapi.</p>`;
+}
+function switchTab(tab){
+  activeTab=tab;
+  ["shap","lime","compare","math","script"].forEach(t=>{
+    document.getElementById("tab"+t[0].toUpperCase()+t.slice(1)).style.display=t===tab?"block":"none";
+  });
+  document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));
+}
+function update(){
+  updateTargetOptions();
+  const st=getState();
+  const x=scenarios[st.scenario].x;
+  const z=modelScore(x);
+  const prob=sigmoid(z);
+  const shapVals=featureContributionApprox(x);
+  const coefs=limeCoefficients(x,st.kernel,st.perturb);
+
+  renderConceptPipeline();
+  renderMetrics(st,x,z,prob);
+  renderFeatureTable(st,x,shapVals);
+  renderModelBox(x,z,prob,shapVals,st);
+  renderShap(st,x,shapVals);
+  renderLime(st,x,coefs);
+  renderCompare(shapVals,coefs);
+  renderMath();
+  renderScript();
+  renderSummary(st,x,prob,shapVals,coefs);
+}
+document.getElementById("scenario").addEventListener("change",update);
+document.getElementById("targetFeature").addEventListener("change",update);
+document.getElementById("kernelWidth").addEventListener("input",update);
+document.getElementById("perturbN").addEventListener("input",update);
+document.getElementById("threshold").addEventListener("input",update);
+document.getElementById("btnShap").onclick=()=>{mode="shap";switchTab("shap");update();};
+document.getElementById("btnLime").onclick=()=>{mode="lime";switchTab("lime");update();};
+document.getElementById("btnCompare").onclick=()=>{mode="compare";switchTab("compare");update();};
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{switchTab(b.dataset.tab);mode=b.dataset.tab==="lime"?"lime":b.dataset.tab==="compare"?"compare":"shap";update();});
+update();
+</script>
+</body>
+</html>
